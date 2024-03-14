@@ -1120,122 +1120,6 @@ static void big_backbone (const std::vector<int> &f,
 }
 
 int main (int argc, char **argv) {
-
-  for (int i = 1; i != argc; i++) {
-    const char *arg = argv[i];
-    if (!strcmp (arg, "-h")) {
-      fputs (usage, stdout);
-      exit (0);
-    } else if (!strcmp (arg, "-V") || !strcmp (arg, "--version")) {
-      fputs (VERSION, stdout);
-      fputc ('\n', stdout);
-      exit (0);
-    } else if (!strcmp (arg, "-c") || !strcmp (arg, "--check")) {
-      check = arg;
-    } else if (!strcmp (arg, "-f") || !strcmp (arg, "--force")) {
-      force = arg;
-    } else if (!strcmp (arg, "-l") || !strcmp (arg, "--logging")) {
-      verbosity = INT_MAX;
-    } else if (!strcmp (arg, "-n") || !strcmp (arg, "--no-print")) {
-      no_print = arg;
-    } else if (!strcmp (arg, "-q") || !strcmp (arg, "--quiet")) {
-      verbosity = -1;
-    } else if (!strcmp (arg, "-r") || !strcmp (arg, "--report")) {
-      report = true;
-    } else if (!strcmp (arg, "-s") || !strcmp (arg, "--statistics")) {
-      always_print_statistics = true;
-    } else if (!strcmp (arg, "-v") || !strcmp (arg, "--verbose")) {
-      if (verbosity < 0)
-        verbosity = 1;
-      else if (verbosity < INT_MAX)
-        verbosity++;
-    } else if (!strcmp (arg, "--no-constrain")) {
-      no_constrain = arg;
-    } else if (!strcmp (arg, "--no-filter")) {
-      no_filter = arg;
-    } else if (!strcmp (arg, "--no-fixed")) {
-      no_fixed = arg;
-    } else if (!strcmp (arg, "--no-flip")) {
-#ifndef NFLIP
-      no_flip = arg;
-#else
-    NO_CADICAL_SUPPORT_FOR_FLIPPING:
-      die ("invalid option '%s' (CaDiCaL does not support flipping)" arg);
-#endif
-    } else if (!strcmp (arg, "--really-flip")) {
-#ifndef NFLIP
-      really_flip = arg;
-#else
-      goto NO_CADICAL_SUPPORT_FOR_FLIPPING;
-#endif
-    } else if (!strcmp (arg, "--no-inprocessing")) {
-      no_inprocessing = arg;
-    } else if (!strcmp (arg, "--one-by-one")) {
-      one_by_one = arg;
-    } else if (!strcmp (arg, "--cores")) {
-      cores = arg;
-    } else if (!strcmp (arg, "--chunking")) {
-      chunking = arg;
-    } else if (!strcmp (arg, "--set-phase")) {
-      set_phase = true;
-    } else if (!strcmp (arg, "--big")) {
-      big = arg;
-    } else if (!strcmp (arg, "--big-no-els")) {
-      big_no_els = arg;
-      if (!big)
-        big = arg;
-    } else if (!strcmp (arg, "--big-roots")) {
-      big_roots = arg;
-      if (!big)
-        big = arg;
-    } else if (!strcmp (arg, "--default")) {
-      no_filter = no_fixed = no_inprocessing = one_by_one = 0;
-#ifndef NFLIP
-      no_flip = 0;
-#endif
-    } else if (!strcmp (arg, "--plain")) {
-      no_filter = no_fixed = no_inprocessing = one_by_one = arg;
-#ifndef NFLIP
-      no_flip = arg;
-#endif
-    } else if (arg[0] == '-' && arg[1])
-      die ("invalid option '%s' (try '-h')", arg);
-    else if (files.backbone.path)
-      die ("too many arguments '%s', '%s' and '%s'", files.dimacs.path,
-           files.backbone.path, arg);
-    else if (files.dimacs.path)
-      files.backbone.path = arg;
-    else
-      files.dimacs.path = arg;
-  }
-
-  if (files.backbone.path) {
-    if (no_print)
-      die ("writing backbone to '%s' and '%s' does not make sense",
-           files.backbone.path, no_print);
-    if (!force && looks_like_a_dimacs_file (files.backbone.path))
-      die ("will not write to CNF alike backbone file '%s' "
-           "without '--force'",
-           files.backbone.path);
-  } else if (force)
-    die ("'%s' does not make sense without backbone file argument", force);
-
-  if (one_by_one && chunking)
-    die ("'%s' does not make sense with '%s'", chunking, one_by_one);
-
-  if (one_by_one && no_constrain)
-    die ("'%s' does not make sense with '%s'", no_constrain, one_by_one);
-
-#ifndef NFLIP
-  if (no_flip && really_flip)
-    die ("'%s' does not make sense in combination with '%s'", really_flip,
-         no_flip);
-#endif
-
-  if (big_no_els && big_roots)
-    die ("'%s' does not make sense in combination with '%s'", big_no_els,
-         big_roots);
-
   msg ("CadiBack BackBone Extractor");
   msg ("Copyright (c) 2023 Armin Biere University of Freiburg");
   msg ("Version " VERSION " " GITID);
@@ -1243,16 +1127,9 @@ int main (int argc, char **argv) {
   msg ("Compiled with '%s'", BUILD);
   line ();
 
-  if (files.backbone.path && strcmp (files.backbone.path, "-")) {
-    if (!(files.backbone.file = fopen (files.backbone.path, "w")))
-      die ("can not write backbone to '%s'", files.backbone.path);
-    files.backbone.close = true;
-  } else {
-    files.backbone.file = stdout;
-    files.backbone.path = "<stdout>";
-    assert (!files.backbone.close);
-  }
-  msg ("writing backbones to '%s'", files.backbone.path);
+  files.backbone.file = stdout;
+  files.backbone.path = "<stdout>";
+  assert (!files.backbone.close);
 
   if (check) {
     checker = new CaDiCaL::Solver ();
@@ -1261,60 +1138,7 @@ int main (int argc, char **argv) {
     msg ("not checking models and backbones "
          "(enable with '--check')");
 
-  if (cores)
-    msg ("using core base preprocessing by '%s'", cores);
-  else
-    msg ("core based preprocessing disabled (enable with '--cores')");
-
-  if (no_constrain)
-    msg ("using 'constrain' interface disabled by '%s'", no_constrain);
-  else
-    msg ("using 'constrain' interface (disable with '--no-constrain')");
-
-  if (no_filter)
-    msg ("filtering backbones by models disabled by '%s'", no_filter);
-  else
-    msg ("filtering backbones by models (disable with '--no-filter')");
-
-  if (no_fixed)
-    msg ("using root-level fixed literals disabled by '%s'", no_fixed);
-  else
-    msg ("using root-level fixed literals (disable with '--no-fixed')");
-
-#ifndef NFLIP
-  if (no_flip)
-    msg ("trying to use flippable literals disabled by '%s'", no_flip);
-  else
-    msg ("trying to use flippable literals (disable with '--no-flip')");
-
-  if (really_flip)
-    msg ("will actually flip flippable literals by '%s'", really_flip);
-  else
-    msg ("only dropping flippable candidates without flipping them");
-#endif
-
-  if (no_inprocessing)
-    msg ("SAT solver inprocessing disabled by '%s'", no_inprocessing);
-  else
-    msg ("SAT solver inprocessing (disable with '--no-inprocessing')");
-
-  if (one_by_one)
-    msg ("backbone candidates checked one-by-one by '%s'", one_by_one);
-  else
-    msg ("backbone candidates checked all-at-once "
-         "(disable with '--one-by-one')");
-
-  if (set_phase)
-    msg ("phases explicitly forced by '--set-phase'");
-  else
-    msg ("phases picked by SAT solver "
-         "(force with '--set-phase')");
-  line ();
-
   solver = new CaDiCaL::Solver ();
-  if (no_inprocessing)
-    solver->set ("inprocessing", 0);
-
   if (verbosity < 0)
     solver->set ("quiet", 1);
   else if (verbosity > 1)
@@ -1329,15 +1153,7 @@ int main (int argc, char **argv) {
     dbg ("initialized solver");
     {
       const char *err;
-      if (files.dimacs.path && strcmp (files.dimacs.path, "-")) {
-        msg ("reading from '%s'", files.dimacs.path);
-        err = solver->read_dimacs (files.dimacs.path, vars);
-      } else {
-        msg ("reading from '<stdin>");
-        err = solver->read_dimacs (stdin, "<stdin>", vars);
-      }
-      if (err)
-        die ("%s", err);
+      err = solver->read_dimacs (stdin, "<stdin>", vars);
 
       // Computing 'vars + 1' as well as the idiom 'idx <= vars' in 'for'
       // loops requires 'vars' to be less than 'INT_MAX' to avoid
