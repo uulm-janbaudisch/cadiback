@@ -259,7 +259,7 @@ static void fatal (const char *, ...)
 static void msg (const char *fmt, ...) {
   if (verbosity < 0)
     return;
-  fputs ("c ", stdout);
+  fputs ("c o ", stdout);
   va_list ap;
   va_start (ap, fmt);
   vprintf (fmt, ap);
@@ -271,7 +271,7 @@ static void msg (const char *fmt, ...) {
 static void line () {
   if (verbosity < 0)
     return;
-  fputs ("c\n", stdout);
+  fputs ("c o\n", stdout);
   fflush (stdout);
 }
 
@@ -1125,7 +1125,6 @@ int main (int argc, char **argv) {
   msg ("Version " VERSION " " GITID);
   msg ("CaDiCaL %s %s", CaDiCaL::version (), CaDiCaL::identifier ());
   msg ("Compiled with '%s'", BUILD);
-  line ();
 
   files.backbone.file = stdout;
   files.backbone.path = "<stdout>";
