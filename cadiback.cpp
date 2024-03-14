@@ -1095,7 +1095,11 @@ int doit (const std::vector<int>& cnf, std::vector<int>& ret_backbone) {
     dbg ("initialized solver");
     {
       /* err = solver->read_dimacs (stdin, "<stdin>", vars); */
-      for(const auto& l: cnf) solver->add(l);
+      vars = 0;
+      for(const auto& l: cnf) {
+        solver->add(l);
+        vars = std::max(vars, std::abs(l));
+      }
 
       // Computing 'vars + 1' as well as the idiom 'idx <= vars' in 'for'
       // loops requires 'vars' to be less than 'INT_MAX' to avoid
