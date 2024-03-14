@@ -25,6 +25,7 @@ namespace CadiBack {
 // Verbosity level: -1=quiet, 0=default, 1=verbose, INT_MAX=logging.
 
 int verbosity;
+std::vector<int> backbones_found;
 
 // Checker solver to check that backbones are really back-bones, enabled by
 // '-c' or '--check' (and quite expensive but useful for debugging).
@@ -631,10 +632,11 @@ bool backbone_variable (int idx) {
     return false;
   fixed[idx] = lit;
   candidates[idx] = 0;
-  if (!no_print) {
-    fprintf (files.backbone.file, "b %d\n", lit);
-    fflush (files.backbone.file);
-  }
+  backbones_found.push_back(lit);
+  /* if (!no_print) { */
+  /*   fprintf (files.backbone.file, "b %d\n", lit); */
+  /*   fflush (files.backbone.file); */
+  /* } */
   if (checker)
     check_backbone (lit);
   assert (statistics.backbones < (size_t) vars);
@@ -1060,7 +1062,7 @@ void big_backbone (const std::vector<int> &f,
   }
 }
 
-int doit (const std::vector<int>& cnf) {
+int doit (const std::vector<int>& cnf, std::vector<int>& ret_backbone) {
   msg ("CadiBack BackBone Extractor");
   msg ("Copyright (c) 2023 Armin Biere University of Freiburg");
   msg ("Version " VERSION " " GITID);
@@ -1092,7 +1094,6 @@ int doit (const std::vector<int>& cnf) {
     CaDiCaL::Signal::set (&handler);
     dbg ("initialized solver");
     {
-      const char *err;
       /* err = solver->read_dimacs (stdin, "<stdin>", vars); */
       for(const auto& l: cnf) solver->add(l);
 
@@ -1597,9 +1598,6 @@ int doit (const std::vector<int>& cnf) {
       printf ("s UNSATISFIABLE\n");
     }
 
-    if (files.backbone.close)
-      fclose (files.backbone.file);
-
     print_statistics ();
     dbg ("deleting solver");
     CaDiCaL::Signal::reset ();
@@ -1610,6 +1608,7 @@ int doit (const std::vector<int>& cnf) {
   line ();
   msg ("exit %d", res);
 
+  ret_backbone = backbones_found;
   return res;
 }
 
