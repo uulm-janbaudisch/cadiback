@@ -70,9 +70,9 @@ fi
 
 if [ x"$CXX" = x ]
 then
-  COMPILE="g++ -Wall"
+  COMPILE="g++ -fPIC -Wall"
 else
-  COMPILE="$CXX -W"
+  COMPILE="$CXX -fPIC -W"
 fi
 
 if [ $debug = yes ]
