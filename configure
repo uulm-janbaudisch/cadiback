@@ -79,7 +79,7 @@ if [ $debug = yes ]
 then
   COMPILE="$COMPILE -g -ggdb3"
 else
-  COMPILE="$COMPILE -O3 -DNDEBUG"
+  COMPILE="$COMPILE -O3 -std=c++17 -DNDEBUG"
 fi
 
 [ $flip = no ] && COMPILE="$COMPILE -DNFLIP"
