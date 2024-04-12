@@ -2,7 +2,7 @@ COMPILE=@COMPILE@
 LINK=ar
 all: libcadiback.a libcadiback.so
 libcadiback.a: cadiback.o ../cadical/build/libcadical.a makefile
-	$(LINK) rcs $@ ../cadical/build/libcadical.a cadiback.o
+	$(LINK) rcs $@ cadiback.o
 libcadiback.so: cadiback.o ../cadical/build/libcadical.so makefile
 	$(COMPILE) -shared -o $@ -L../cadical/build/ -lcadical cadiback.o
 cadiback.o: cadiback.cpp config.hpp ../cadical/src/cadical.hpp makefile
