@@ -284,94 +284,94 @@ void print_statistics () {
       unknown_time += delta;
     }
   }
-  printf ("c\n");
-  printf ("c --- [ backbone statistics ] ");
+  printf ("c o\n");
+  printf ("c o --- [ backbone statistics ] ");
   printf ("------------------------------------------------\n");
-  printf ("c\n");
-  printf ("c found         %9zu backbones     %3.0f%%\n",
+  printf ("c o\n");
+  printf ("c o found         %9zu backbones     %3.0f%%\n",
           statistics.backbones, percent (statistics.backbones, vars));
-  printf ("c dropped       %9zu candidates    %3.0f%%\n",
+  printf ("c o dropped       %9zu candidates    %3.0f%%\n",
           statistics.dropped, percent (statistics.dropped, vars));
-  printf ("c\n");
-  printf ("c filtered      %9zu candidates    %3.0f%%\n",
+  printf ("c o\n");
+  printf ("c o filtered      %9zu candidates    %3.0f%%\n",
           statistics.filtered, percent (statistics.filtered, vars));
 #ifndef NFLIP
-  printf ("c flippable     %9zu candidates    %3.0f%%\n",
+  printf ("c o flippable     %9zu candidates    %3.0f%%\n",
           statistics.flippable, percent (statistics.flippable, vars));
-  printf ("c flipped       %9zu candidates    %3.0f%%\n",
+  printf ("c o flipped       %9zu candidates    %3.0f%%\n",
           statistics.flipped, percent (statistics.flipped, vars));
 #endif
-  printf ("c fixed         %9zu candidates    %3.0f%%\n", statistics.fixed,
+  printf ("c o fixed         %9zu candidates    %3.0f%%\n", statistics.fixed,
           percent (statistics.fixed, vars));
-  printf ("c core          %9zu candidates    %3.0f%%\n", statistics.core,
+  printf ("c o core          %9zu candidates    %3.0f%%\n", statistics.core,
           percent (statistics.core, vars));
-  printf ("c found         %9zu big_backbone %3.0f%%\n",
+  printf ("c o found         %9zu big_backbone %3.0f%%\n",
           statistics.big_backbones,
           percent (statistics.big_backbones, statistics.backbones));
-  printf ("c failed        %9zu candidates    %3.0f%%\n", statistics.failed,
+  printf ("c o failed        %9zu candidates    %3.0f%%\n", statistics.failed,
           percent (statistics.failed, vars));
-  printf ("c\n");
-  printf ("c called solver %9zu times         %3.0f%%\n",
+  printf ("c o\n");
+  printf ("c o called solver %9zu times         %3.0f%%\n",
           statistics.calls.total,
           percent (statistics.calls.total, vars + 1));
-  printf ("c satisfiable   %9zu times         %3.0f%%\n",
+  printf ("c o satisfiable   %9zu times         %3.0f%%\n",
           statistics.calls.sat,
           percent (statistics.calls.sat, statistics.calls.total));
-  printf ("c unsatisfiable %9zu times         %3.0f%%\n",
+  printf ("c o unsatisfiable %9zu times         %3.0f%%\n",
           statistics.calls.unsat,
           percent (statistics.calls.unsat, statistics.calls.total));
-  printf ("c\n");
-  printf ("c --- [ backbone profiling ] ");
+  printf ("c o\n");
+  printf ("c o --- [ backbone profiling ] ");
   printf ("-------------------------------------------------\n");
-  printf ("c\n");
+  printf ("c o\n");
   if (always_print_statistics || verbosity > 0 || first_time)
-    printf ("c   %10.2f %6.2f %% first\n", first_time,
+    printf ("c o   %10.2f %6.2f %% first\n", first_time,
             percent (first_time, total_time));
   if (verbosity > 0 || sat_time)
-    printf ("c   %10.2f %6.2f %% sat\n", sat_time,
+    printf ("c o   %10.2f %6.2f %% sat\n", sat_time,
             percent (sat_time, total_time));
   if (verbosity > 0 || unsat_time)
-    printf ("c   %10.2f %6.2f %% unsat\n", unsat_time,
+    printf ("c o   %10.2f %6.2f %% unsat\n", unsat_time,
             percent (unsat_time, total_time));
   if (verbosity > 0 || satmax_time)
-    printf ("c   %10.2f %6.2f %% satmax\n", satmax_time,
+    printf ("c o   %10.2f %6.2f %% satmax\n", satmax_time,
             percent (satmax_time, total_time));
   if (verbosity > 0 || unsatmax_time)
-    printf ("c   %10.2f %6.2f %% unsatmax\n", unsatmax_time,
+    printf ("c o   %10.2f %6.2f %% unsatmax\n", unsatmax_time,
             percent (unsatmax_time, total_time));
   if (verbosity > 0 || unknown_time)
-    printf ("c   %10.2f %6.2f %% unknown\n", unknown_time,
+    printf ("c o   %10.2f %6.2f %% unknown\n", unknown_time,
             percent (unknown_time, total_time));
   if (verbosity > 0 || solving_time)
-    printf ("c   %10.2f %6.2f %% solving\n", solving_time,
+    printf ("c o   %10.2f %6.2f %% solving\n", solving_time,
             percent (solving_time, total_time));
   if (verbosity > 0 || flip_time)
-    printf ("c   %10.2f %6.2f %% flip\n", flip_time,
+    printf ("c o   %10.2f %6.2f %% flip\n", flip_time,
             percent (flip_time, total_time));
 
   if (big && (verbosity > 0 || big_read_time))
-    printf ("c   %10.2f %6.2f %% big_read\n", big_read_time,
+    printf ("c o   %10.2f %6.2f %% big_read\n", big_read_time,
             percent (big_read_time, total_time));
   if (big && (verbosity > 0 || big_els_time))
-    printf ("c   %10.2f %6.2f %% big_no_els\n", big_els_time,
+    printf ("c o   %10.2f %6.2f %% big_no_els\n", big_els_time,
             percent (big_els_time, total_time));
   if (big && (verbosity > 0 || big_search_time))
-    printf ("c   %10.2f %6.2f %% big_search\n", big_search_time,
+    printf ("c o   %10.2f %6.2f %% big_search\n", big_search_time,
             percent (big_search_time, total_time));
   if (big && (verbosity > 0 || big_extension_time))
-    printf ("c   %10.2f %6.2f %% big_extension\n", big_extension_time,
+    printf ("c o   %10.2f %6.2f %% big_extension\n", big_extension_time,
             percent (big_extension_time, total_time));
   if (big && (verbosity > 0 || big_check_time))
-    printf ("c   %10.2f %6.2f %% big_check\n", big_check_time,
+    printf ("c o   %10.2f %6.2f %% big_check\n", big_check_time,
             percent (big_check_time, total_time));
 
   if (verbosity > 0 || check_time)
-    printf ("c   %10.2f %6.2f %% check\n", check_time,
+    printf ("c o   %10.2f %6.2f %% check\n", check_time,
             percent (check_time, total_time));
-  printf ("c ====================================\n");
-  printf ("c   %10.2f 100.00 %% total\n", total_time);
-  printf ("c\n");
-  printf ("c\n");
+  printf ("c o ====================================\n");
+  printf ("c o   %10.2f 100.00 %% total\n", total_time);
+  printf ("c o\n");
+  printf ("c o\n");
   fflush (stdout);
   if (!solver)
     return;
@@ -384,7 +384,7 @@ class CadiBackSignalHandler : public CaDiCaL::Handler {
   virtual void catch_signal (int sig) {
     if (verbosity < 0)
       return;
-    printf ("c caught signal %d\n", sig);
+    printf ("c o caught signal %d\n", sig);
     print_statistics ();
   }
 };
@@ -403,7 +403,7 @@ int solve () {
   statistics.calls.total++;
   {
     char prefix[32];
-    snprintf (prefix, sizeof prefix, "c #%zu ", statistics.calls.total);
+    snprintf (prefix, sizeof prefix, "c o #%zu ", statistics.calls.total);
     solver->prefix (prefix);
   }
   int remain = remaining_candidates ();
@@ -449,7 +449,7 @@ void inc_checked () {
   assert (checker);
   statistics.checked++;
   char prefix[32];
-  snprintf (prefix, sizeof prefix, "c C%zu ", statistics.checked);
+  snprintf (prefix, sizeof prefix, "c o C%zu ", statistics.checked);
   checker->prefix (prefix);
 }
 
@@ -916,10 +916,10 @@ bool big_backbone_node (int node) {
   if (!literal)
     return false;
   fixed[idx] = literal;
-  if (!no_print) {
-    fprintf (files.backbone.file, "b %d\n", literal);
-    fflush (files.backbone.file);
-  }
+  /* if (!no_print) { */
+  /*   fprintf (files.backbone.file, "b %d\n", literal); */
+  /*   fflush (files.backbone.file); */
+  /* } */
   solver->add (literal);
   solver->add (0);
   assert (statistics.backbones < (size_t) vars);
@@ -1136,7 +1136,7 @@ int doit (const std::vector<int>& cnf, std::vector<int>& ret_backbone) {
       if (res) {
         assert (res == 20);
         msg ("Unsatisfiability determined by ELS");
-        printf ("s UNSATISFIABLE\n");
+        /* printf ("s UNSATISFIABLE\n"); */
         if (files.backbone.close)
           fclose (files.backbone.file);
         print_statistics ();
@@ -1537,17 +1537,17 @@ int doit (const std::vector<int>& cnf, std::vector<int>& ret_backbone) {
 
       // All backbones found! So terminate the backbone list with 'b 0'.
 
-      if (!no_print) {
-        fprintf (files.backbone.file, "b 0\n");
-        fflush (files.backbone.file);
-      }
+      /* if (!no_print) { */
+      /*   fprintf (files.backbone.file, "b 0\n"); */
+      /*   fflush (files.backbone.file); */
+      /* } */
 
       // We only print 's SATISFIABLE' here which is supposed to indicate
       // that the run completed.  Otherwise printing it before printing
       // 'b' lines confuses scripts (and 'zummarize').
 
       line ();
-      printf ("s SATISFIABLE\n");
+      /* printf ("s SATISFIABLE\n"); */
       fflush (stdout);
 
 #ifndef NDEBUG
@@ -1599,7 +1599,7 @@ int doit (const std::vector<int>& cnf, std::vector<int>& ret_backbone) {
       }
     } else {
       assert (res == 20);
-      printf ("s UNSATISFIABLE\n");
+      /* printf ("s UNSATISFIABLE\n"); */
     }
 
     print_statistics ();
