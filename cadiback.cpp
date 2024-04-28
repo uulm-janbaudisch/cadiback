@@ -274,7 +274,7 @@ double stop_timer () {
 void print_statistics () {
   if (verbosity < 0)
     return;
-  solver->prefix ("c o");
+  solver->prefix ("c o ");
   double total_time = time ();
   volatile double *timer = started;
   if (started) {
