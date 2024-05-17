@@ -1062,7 +1062,10 @@ void big_backbone (const std::vector<int> &f,
   }
 }
 
-int doit (const std::vector<int>& cnf, std::vector<int>& ret_backbone) {
+int doit (const std::vector<int>& cnf,
+    const int _verb,
+    std::vector<int>& ret_backbone) {
+  verbosity = _verb-2;
   msg ("CadiBack BackBone Extractor");
   msg ("Copyright (c) 2023 Armin Biere University of Freiburg");
   msg ("Version " VERSION " " GITID);
