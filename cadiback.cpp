@@ -119,7 +119,7 @@ const char *cores;
 // anytime-context this option usally doesn't yield any benefit, however it
 // also usually doesn't cost much. See our FMCAD'23 paper on Big Backbones
 // for a description of the algorithm and experimental resutls.
-const char *big;
+const char *big = "yes";
 
 // Applying ELS (Equivalent literal substitution) turns the BIG into a DAG.
 // This isn't necessary for KB3 but can increase performance.
