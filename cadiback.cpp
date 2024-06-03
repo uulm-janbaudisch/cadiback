@@ -30,12 +30,12 @@ std::vector<int> backbones_found;
 // Checker solver to check that backbones are really back-bones, enabled by
 // '-c' or '--check' (and quite expensive but useful for debugging).
 //
-const char *check = NULL;
-CaDiCaL::Solver *checker = NULL;
+const char *check;
+CaDiCaL::Solver *checker;
 
 // Force writing to CNF alike output file.
 //
-const char *force = NULL;
+const char *force;
 
 // Print backbones by default. Otherwise only produce statistics.
 //
@@ -56,7 +56,7 @@ const char *no_constrain;
 
 // Do not filter candidates by obtained models.
 //
-const char *no_filter = NULL;
+const char *no_filter;
 
 #ifndef NFLIP
 
@@ -66,37 +66,37 @@ const char *no_filter = NULL;
 // 'flippable' function only checks this and 'flip' actually does it.
 // We can use both to remove backbone candidates.
 //
-const char *no_flip = NULL;     // No use of flippable information.
-const char *really_flip = NULL; // Also actually flip flippable.
+const char *no_flip;     // No use of flippable information.
+const char *really_flip; // Also actually flip flippable.
 
 #endif
 
 // The solver can give back information about root-level fixed literals
 // which can cheaply be used to remove candidates or determine backbones.
 //
-const char *no_fixed = NULL;
+const char *no_fixed;
 
 // Disable preprocessing and inprocessing.
 //
-const char *no_inprocessing = NULL;
+const char *no_inprocessing;
 
 // Force the SAT solver to assign decisions to a value which would make the
 // remaining backbone candidate literals false.  This is a very natural idea
 // but actual had negative effects and thus is now disabled by default.
 //
-bool set_phase = false;
+bool set_phase;
 
 // Try each candidate after each other with a single assumption, i.e., do
 // not use the 'constrain' optimization.
 //
-const char *one_by_one = NULL;
+const char *one_by_one;
 
 // If we use constraints ('one-by-one' is off) then we might want to limit
 // the size of the constraints.  On success (solver returns 'unsatisfiable')
 // we increase the constraint size by factor of 10 and on failure (solver
 // finds a model) we reset constraint size to '1'.
 //
-const char *chunking = NULL;// = "true";
+const char *chunking;
 
 // If the following option is enabled we try to compute cores as in
 // 'MiniBones', which assumes the conjunction of the complement of
@@ -110,7 +110,7 @@ const char *chunking = NULL;// = "true";
 // the set of assumptions becomes empty, in which case we fall back
 // to the iterative algorithms.
 //
-const char *cores = NULL; // "true";
+const char *cores;
 
 // If this option is enable CadiBack will initially run our algorithm KB3 to
 // search for Backbones that can be identified in the BIG (Binary
@@ -123,13 +123,13 @@ const char *big = "yes";
 
 // Applying ELS (Equivalent literal substitution) turns the BIG into a DAG.
 // This isn't necessary for KB3 but can increase performance.
-const char *big_no_els = NULL;
+const char *big_no_els;
 
 // KB3 probes individual literals by propagating them in the BIG. To find
 // all Backbones in the BIG it is sufficent to only probe the roots of the
 // BIG. This can however have detrimental effects for KB3 and is disabled by
 // default. This option requires ELS.
-const char *big_roots ="yes";
+const char *big_roots;
 
 int vars;        // The number of variables in the CNF.
 int *fixed;      // The resulting fixed backbone literals.
