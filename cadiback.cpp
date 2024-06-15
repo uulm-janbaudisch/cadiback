@@ -5,9 +5,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 
 #include <algorithm>
 #include <numeric>
+#include <set>
 
 // Include the main 'CaDiCaL' API from 'cadical.hpp', but also some helper
 // code from its library (from the 'CaDiCaL' source code directory').
@@ -186,6 +188,7 @@ double satmax_time, unsatmax_time, flip_time, check_time;
 double big_search_time, big_read_time, big_els_time, big_check_time,
     big_extension_time;
 volatile double *started, start_time;
+double cadiback_start;
 
 // Declaring these with '__attribute__ ...' gives nice warnings.
 
@@ -368,7 +371,7 @@ void print_statistics () {
     printf ("c o   %10.2f %6.2f %% check\n", check_time,
             percent (check_time, total_time));
   printf ("c o ====================================\n");
-  printf ("c o   %10.2f 100.00 %% total\n", total_time);
+  printf ("c o   %10.2f 100.00 %% total\n", (total_time - cadiback_start));
   printf ("c o\n");
   printf ("c o\n");
   fflush (stdout);
@@ -1054,6 +1057,7 @@ void big_backbone (const std::vector<int> &f,
 
 int doit (const std::vector<int>& cnf,
     const int _verb,
+    std::vector<int>& drop_cands,
     std::vector<int>& ret_backbone) {
   verbosity = _verb-2;
   msg ("CadiBack BackBone Extractor");
@@ -1101,6 +1105,7 @@ int doit (const std::vector<int>& cnf,
       }
     }
     msg ("found %d variables", vars);
+    std::set<int> drop_cands_set(drop_cands.begin(), drop_cands.end());
 
     if (big) {
       msg ("starting BIG search after %.2f seconds", time ());
@@ -1197,6 +1202,7 @@ int doit (const std::vector<int>& cnf,
     // Determine first model or that formula is unsatisfiable.
 
     line ();
+    cadiback_start = time ();
     msg ("starting solving after %.2f seconds", time ());
     res = solve ();
     assert (res == 10 || res == 20);
@@ -1240,11 +1246,15 @@ int doit (const std::vector<int>& cnf,
         int lit = solver->val (idx) < 0 ? -idx : idx; // Legacy support.
         assert (lit == idx || lit == -idx);
         if (!big) {
-          candidates[idx] = lit;
+          if (!drop_cands_set.count(idx)) {
+            candidates[idx] = lit;
+          } else {
+            candidates[idx] = 0;
+          }
           fixed[idx] = 0;
-        } else if (fixed[idx])
+        } else if (fixed[idx] || drop_cands_set.count(idx)) {
           candidates[idx] = 0;
-        else
+        } else
           candidates[idx] = lit;
         // If enabled by '--set-phase' set opposite value as default
         // decision phase.  This seems to have  negative effects with and
