@@ -28,6 +28,8 @@ namespace CadiBack {
 int verbosity;
 std::vector<int> backbones_found;
 
+std::vector<int> learned_bins;
+
 // Checker solver to check that backbones are really back-bones, enabled by
 // '-c' or '--check' (and quite expensive but useful for debugging).
 //
@@ -1055,10 +1057,22 @@ void big_backbone (const std::vector<int> &f,
   }
 }
 
+class MyLearn : public CaDiCaL::Learner {
+  bool learning(int sz) {
+    if (sz <= 2 && learned_bins.size() < 60000) return true;
+    return false;
+  }
+  void learn (int lit) {
+    learned_bins.push_back(lit);
+  }
+};
+
 int doit (const std::vector<int>& cnf,
     const int _verb,
     std::vector<int>& drop_cands,
+    std::vector<int>& ret_learned_bins,
     std::vector<int>& ret_backbone) {
+  assert(ret_learned_bins.empty());
   verbosity = _verb-2;
   msg ("CadiBack BackBone Extractor");
   msg ("Copyright (c) 2023 Armin Biere University of Freiburg");
@@ -1078,6 +1092,8 @@ int doit (const std::vector<int>& cnf,
          "(enable with '--check')");
 
   solver = new CaDiCaL::Solver ();
+  MyLearn mylearn;
+  solver->connect_learner(&mylearn);
   if (verbosity < 0)
     solver->set ("quiet", 1);
   else if (verbosity > 1)
@@ -1139,6 +1155,7 @@ int doit (const std::vector<int>& cnf,
         if (check)
           assert (solve () == 20);
         dbg ("deleting solver");
+        solver->disconnect_learner();
         delete solver;
         line ();
         msg ("exit %d", res);
@@ -1606,12 +1623,14 @@ int doit (const std::vector<int>& cnf,
     dbg ("deleting solver");
   }
 
+  solver->disconnect_learner();
   delete solver;
 
   line ();
   msg ("exit %d", res);
 
   ret_backbone = backbones_found;
+  ret_learned_bins = learned_bins;
   return res;
 }
 
